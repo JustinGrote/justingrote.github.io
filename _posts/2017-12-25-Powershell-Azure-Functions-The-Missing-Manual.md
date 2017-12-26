@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Powershell Azure Functions: The Missing Manual
+title: Powershell Azure Functions The Missing Manual
 ---
 
 # Powershell Azure Functions: The Missing Manual
