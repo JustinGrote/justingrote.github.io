@@ -1,5 +1,4 @@
 ---
-layout: post
 title: Powershell Azure Functions The Missing Manual
 ---
 
