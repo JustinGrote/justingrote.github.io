@@ -12,13 +12,15 @@ This article is targeted towards people who have Powershell experience, and need
 
 Azure Automation is a much more mature Powershell environment in Azure. Azure Functions is still considered experimental. So why would you want to use it?
 
-1. **It's Dirt Cheap**: Azure Functions gives you 400,000 GB-s and 1 million executions for free every month. Azure Automation only gives you 500 minutes. You can build an incredibly advanced Powershell function workflow and API environment and never get billed a single dime.
+1. **It's Dirt Cheap**: Azure Functions gives you 400,000 GB-s and 1 million executions for free every month under the Consumption plan. Azure Automation only gives you 500 minutes. You can build an incredibly advanced Powershell function workflow and API environment and never get billed a single dime.
 2. **It's Fast**: With Azure Automation you usually have to wait for the job to be scheduled, queued, etc. and the feedback loop is very slow. Azure Functions start in seconds and scale nearly limitlessly and automatically, making it far easier to test and troubleshoot.
 3. **It's better for APIs**: Azure Functions makes it really easy to make a query with a URL or trigger on an object, take that input into Powershell, do Powershell-y things to it, and output it back out as JSON, XML, or whatever you want. You can build great APIs with Powershell very rapidly, why should the C# and Java guys have all the fun?
 
 ## Azure Functions Environment
 
 Azure Functions operates basically by running on top of [Azure Web Jobs](https://buildazure.com/2017/03/08/azure-functions-vs-web-jobs-how-to-choose/) which in turn run on [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/). As a result, [the same OS enviroment restrictions apply](https://docs.microsoft.com/en-us/azure/app-service/web-sites-available-operating-system-functionality).
+
+The biggest limitation is that under the free Consumption (Dynamic) plan, jobs will timeout if they take longer than 5 minutes to execute by default. [You can increase that up to 10 minutes by editing the host JSON](https://buildazure.com/2017/08/17/azure-functions-extend-execution-timeout-past-5-minutes/). However, Azure Functions are generally meant to be designed to be "small and fast" so if your process takes longer than 10 minutes, consider breaking it into chunks and connecting them via something like Azure Queues, or run a control script on Azure Automation, a function on a dedicated App Service plan, or a Windows VM.
 
 ### Logs Panel and Verbose/Debug Output
 
