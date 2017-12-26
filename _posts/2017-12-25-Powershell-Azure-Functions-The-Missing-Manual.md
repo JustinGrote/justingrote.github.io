@@ -20,9 +20,17 @@ Azure Automation is a much more mature Powershell environment in Azure. Azure Fu
 
 Azure Functions operates basically by running on top of [Azure Web Jobs](https://buildazure.com/2017/03/08/azure-functions-vs-web-jobs-how-to-choose/) which in turn run on [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/). As a result, [the same OS enviroment restrictions apply](https://docs.microsoft.com/en-us/azure/app-service/web-sites-available-operating-system-functionality).
 
+### Limitations
+
+#### Consumption Plan Job Runtime Timeout
+
 The biggest limitation is that under the free Consumption (Dynamic) plan, jobs will timeout if they take longer than 5 minutes to execute by default. [You can increase that up to 10 minutes by editing the host JSON](https://buildazure.com/2017/08/17/azure-functions-extend-execution-timeout-past-5-minutes/). However, Azure Functions are generally meant to be designed to be "small and fast" so if your process takes longer than 10 minutes, consider breaking it into chunks and connecting them via something like Azure Queues, or run a control script on Azure Automation, a function on a dedicated App Service plan, or a Windows VM.
 
-### Logs Panel and Verbose/Debug Output
+#### Consumption Plan 1.5GB Memory Limit
+
+As of this writing, the Consumption plan instances only provide 1.5GB of memory, so if your function requires more than that, either refactor it to store the data somewhere temporarily and flush memory, or place it on a dedicated App Service Plan instance with more memory.
+
+#### Logs Panel and Verbose/Debug Output
 
 Azure Functions have a built in log streaming service panel. For powershell, unlike the normal powershell console, this log streaming will only show the Output and Error streams and will not show the Debug, Verbose, or Host streams at all, so in other words Write-Host, Write-Debug, and Write-Verbose will show nothing in this log. The DebugPreference and VerbosePreference variables also have no effect on this.
 
@@ -88,3 +96,43 @@ Some notable Azure Function specific Powershell Variables:
 * EXECUTION_CONTEXT_FUNCTIONDIRECTORY - The root of where your Azure Function code resides. Very handy when trying to reference or source other code.
 * EXECUTION_CONTEXT_FUNCTIONNAME - The name of your function, e.g. "Sandbox". It is also helpful to test on this if it exists if you need to know if you are in Azure Functions or not (for instance if your code is designed to run multiple places) e.g.  `if ($EXECUTION_CONTEXT_FUNCTIONNAME) {"We are in Azure Functions!"}`
 * REQ_* - Several variables including information about how the Azure Function was started if via HTTP request. [Mark Kean has written a great article on how these work in general](https://marckean.com/2017/10/18/powershell-based-azure-functions/).
+
+## Powershell Modules
+
+With Powershell 5.1, you get all the latest modules that came with 2016, including Pester and some newer version of the Azure Resource Manager modules. You can see the full list available:
+``` powershell
+Get-Module -ListAvailable | Format-Table -AutoSize | Out-String
+```
+
+### Powershell Gallery
+Now that Azure Functions runs Powershell 5.1, you can use the native PackageManagement commands to run and import modules from the Gallery. Unfortunately, Powershell Gallery relies on NuGet, and it is not installed by default in the App Service VM. Fortunately, it's easy to fetch and install quickly:
+
+~~~ powershell
+#Silently Installs the NuGET requirement for Powershell Gallery if it isn't present.
+if (-not (get-packageprovider Nuget)) {
+    Install-PackageProvider Nuget -Scope currentuser | out-null
+}
+~~~
+
+Once this is run, you can use `find-module`, `install-module`, `save-module` etc. just fine against the Powershell Gallery by default or you can add your own custom module repository. However, as of this writing `install-module` doesn't seem to work, however `Save-Module` works just fine if you point it to a folder already in the PSModulePath.
+
+The following code will test if the POSHRSJob module is present, and if not, download it to your userprofile temp directory (which is stored on the TEMP storage and not persistent between App Service VMs). This keeps your function fast by not downloading it again if it already exists.
+
+~~~ powershell
+$ModuleToInstall = "POSHRSJob"
+$PSLocalModulePath = "$($env:UserProfile)\Documents\WindowsPowershell\Modules"
+
+<#
+Normally we would use install-module -scope currentuser, but that doesn't work for some reason.
+Save-Module accomplishes the same thing and can target multiple paths.
+You can remove the Verbose part to cut down on the logs as well.
+#>
+if (-not (get-module $ModuleToInstall -listavailable)) {
+    save-module $ModuleToInstall -Path $PSLocalModulePath -verbose 4>&1
+}
+~~~
+
+At this point you can just invoke the Cmdlets in the module and Powershell will auto-import the module and its cmdlets on-demand, no need to import the module directly with `Import-Module`.
+
+As noted above you can also create a "modules" directory in your function directory and save your files there if you want the modules to load every single invocation.
+
