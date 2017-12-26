@@ -8,7 +8,7 @@ Recently the Azure Functions runtime was updated to run on Windows Server 2016. 
 
 This article is targeted towards people who have Powershell experience, and need to know how the behavior is different from a normal Powershell 5.1 environment.
 
-## Why Azure Functions over Azure Automation (or a Windows Server for that matter)?
+## Why Azure Functions over Azure Automation
 
 Azure Automation is a much more mature Powershell environment in Azure. Azure Functions is still considered experimental. So why would you want to use it?
 
@@ -55,7 +55,7 @@ In Azure Functions you have two primary local storage directories available to y
 ### Special Azure Functions Directories
 
 1. **Function Directory:** This is where your function files live as you see them in the "View Files" tab. The path is stored in the **$EXECUTION_CONTEXT_FUNCTIONDIRECTORY** powershell variable. This location is **D:\home\site\wwwroot\\\<functionname\>**, where \<functionname\> is the name of your Azure function. For instance, if you name your function Sandbox, the path is *D:\home\site\wwwroot\Sandbox*. I recommend running `Set-Location $EXECUTION_CONTEXT_FUNCTIONDIRECTORY` as one of your first function activities so your relative commands can call other resources in your function directory for ease of use.
-2. **Modules Directory:** Inside of your function directory, you can create a directory called "modules" which Azure Functions will autoload any powershell modules that are part of your script. While this is an easy option, I generally recommend not using this, and instead loading modules as you need them using Powershell 5.1's built-in loading logic to optimize performance. For instance, if your full function package has a library of 50 modules, maybe only 1 or 2 need to be run for any individual invocation, so why 
+2. **Modules Directory:** Inside of your function directory, you can create a directory called "modules" which Azure Functions will autoload any powershell modules that are part of your script. While this is an easy option, I generally recommend not using this, and instead loading modules as you need them using Powershell 5.1's built-in loading logic to optimize performance. For instance, if your full function package has a library of 50 modules, maybe only 1 or 2 need to be run for any individual invocation, so no need to take up unnecessary time loading a bunch of modules you won't use.
 
 ## Variables
 
@@ -70,9 +70,10 @@ Get-Item env: | Format-Table -AutoSize | Out-String
 The format table and out-string are necessary because Functions by default will output the object as its object type, this gives it a more "powershell-y" output to the Function log.
 
 Some notable Azure Function specific environmental variables:
+
 * TEMP - References D:\Local\Temp. Handy for writing out temp files you need to save for the life of a function. LOCALAPPDATA can also work for this. `"Temp File" > $env:TEMP\mytempfile.txt`
 * FUNCTIONS_EXTENSION_VERSION - Refers to the version of Azure Functions Runtime being used. Not super useful now except as a test to see if you are running in Azure Functions if you need it.
-* APPSETTING_* - 
+* APPSETTING_* - This is a list of the function application settings. These are "secret" to the app itself, so you can edit these in the Functions Azure control panel app settings to add things like API keys and whatnot (though the better solution is to use Azure Key vault instead)
 
 ### Powershell Variables
 
