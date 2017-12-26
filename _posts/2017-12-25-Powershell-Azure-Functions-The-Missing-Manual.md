@@ -13,8 +13,8 @@ This article is targeted towards people who have Powershell experience, and need
 Azure Automation is a much more mature Powershell environment in Azure. Azure Functions is still considered experimental. So why would you want to use it?
 
 1. **It's Dirt Cheap**: Azure Functions gives you 400,000 GB-s and 1 million executions for free every month under the Consumption plan. Azure Automation only gives you 500 minutes. You can build an incredibly advanced Powershell function workflow and API environment and never get billed a single dime.
-2. **It's Fast**: With Azure Automation you usually have to wait for the job to be scheduled, queued, etc. and the feedback loop is very slow. Azure Functions start in seconds and scale nearly limitlessly and automatically, making it far easier to test and troubleshoot.
-3. **It's better for APIs**: Azure Functions makes it really easy to make a query with a URL or trigger on an object, take that input into Powershell, do Powershell-y things to it, and output it back out as JSON, XML, or whatever you want. You can build great APIs with Powershell very rapidly, why should the C# and Java guys have all the fun?
+2. **It's Fast**: With Azure Automation you usually have to wait for the job to be scheduled, queued, etc. and the feedback loop is very slow, taking often several minutes before your job runs and you see the result. Azure Functions start in seconds and scale nearly limitlessly and automatically, making it far easier to test and troubleshoot.
+3. **It's better for APIs**: Azure Functions makes it really easy to make a query with a URL or trigger on an object, queue input, OneDrive for Business file upload, etc., take that input into Powershell, do Powershell-y things to it, and output it back out as JSON, XML, or whatever you want. You can build great APIs with Powershell very rapidly, why should the C# and Java guys have all the fun? When you first create a Powershell Azure HTTP Trigger Function, the sample code is basically a REST API example written in Powershell that is ready-to-go for you.
 
 ## Azure Functions Environment
 
@@ -100,11 +100,13 @@ Some notable Azure Function specific Powershell Variables:
 ## Powershell Modules
 
 With Powershell 5.1, you get all the latest modules that came with 2016, including Pester and some newer version of the Azure Resource Manager modules. You can see the full list available:
+
 ``` powershell
 Get-Module -ListAvailable | Format-Table -AutoSize | Out-String
 ```
 
 ### Powershell Gallery
+
 Now that Azure Functions runs Powershell 5.1, you can use the native PackageManagement commands to run and import modules from the Gallery. Unfortunately, Powershell Gallery relies on NuGet, and it is not installed by default in the App Service VM. Fortunately, it's easy to fetch and install quickly:
 
 ~~~ powershell
@@ -136,3 +138,20 @@ At this point you can just invoke the Cmdlets in the module and Powershell will 
 
 As noted above you can also create a "modules" directory in your function directory and save your files there if you want the modules to load every single invocation.
 
+## Troubleshoot and Debug with Kudu
+
+Even though Azure Functions is supposed to take care of the "server" part for you, sometimes you need to get under the hood and fetch some files or test something in your App Service VM. Kudu is the console that gives you an interactive file browser, a process explorer, and powershell debug console to investigate problems. [David O'Brien has written a good article on how to access this troubleshooting environment](https://david-obrien.net/2016/07/azure-functions-kudu/).
+
+## Access Functions Directory via FTP
+
+Since Azure Functions runs on App Service, [you can use FTP to access and deploy your functions](https://docs.microsoft.com/en-us/azure/app-service/app-service-deploy-ftp). The easiest way to find the credentials is to go to your function, go to Platform Featuers, then click Deployment Credentials and set your FTP password. Once complete you can go to Platform Featuers -> Properties and find your FTPS host name URL and FTP Deployment User to use to connect.
+
+I find this connection is extremely useful in conjunction with the [ftp-simple Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=humy2833.ftp-simple) to directly edit Azure Powershell Functions in VS Code rather than in the web editor. VS Code should also natively have this ftp remote edit functionality soon, [it already exists in preview mode](https://code.visualstudio.com/updates/v1_17#_preview-remote-file-system-api).
+
+## Set up Continuous Deployment for Azure Functions
+
+While direct editing is nice for sandboxing and practice, once you get serious and start designing solutions, you will want to save your Powershell Functions in some sort of source control (e.g. GitHub) and [publish them more automatically to Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-continuous-deployment). When used in combination with the [Azure Functions Slots Preview](https://blog.elmah.io/continuous-deployment-of-azure-functions-with-slots/) this is an extrempely powerful way to test and deploy your code in Production with minimal interruption to usage.
+
+## Powershell Azure Functions Rock
+
+I hope this helps you get your feet wet with Azure Powershell functions, they are an extremely powerful way to deploy solutions with Powershell that are highly scalable and extremely inexpensive.
