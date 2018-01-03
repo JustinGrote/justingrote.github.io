@@ -152,6 +152,14 @@ I find this connection is extremely useful in conjunction with the [ftp-simple V
 
 While direct editing is nice for sandboxing and practice, once you get serious and start designing solutions, you will want to save your Powershell Functions in some sort of source control (e.g. GitHub) and [publish them more automatically to Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-continuous-deployment). When used in combination with the [Azure Functions Slots Preview](https://blog.elmah.io/continuous-deployment-of-azure-functions-with-slots/) this is an extrempely powerful way to test and deploy your code in Production with minimal interruption to usage.
 
-## Powershell Azure Functions Rock
+## Using Managed Service Identity with Functions to access 
+
+A common problem with Azure Functions is where to store credentials when accessing other services. Azure Key Vault is a logical location, and when combined with a Managed Services Identity, the Azure Function can securely access credentials it needs.
+
+* [Enabling and Using Managed Service Identity to access an Azure Key Vault with Azure Powershell Functions](https://blog.darrenjrobinson.com/enabling-and-using-managed-service-identity-to-access-an-azure-key-vault-with-azure-powershell-functions/)
+* [Using AD Managed Service Identity to Access Microsoft Graph with Azure Functions](https://gotoguy.blog/2017/09/21/using-azure-ad-managed-service-identity-to-access-microsoft-graph-with-azure-functions-and-powershell/)
+
+
+## Powershell Azure Functions are Rad
 
 I hope this helps you get your feet wet with Azure Powershell functions, they are an extremely powerful way to deploy solutions with Powershell that are highly scalable and extremely inexpensive.
