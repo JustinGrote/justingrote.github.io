@@ -1,7 +1,6 @@
 ---
 title: Powershell Azure Functions The Missing Manual
 ---
-
 # Powershell Azure Functions: The Missing Manual
 
 Recently the Azure Functions runtime was updated to run on Windows Server 2016. This means that Powershell now runs 5.1 instead of 4.0 and there is a lot of benefit that comes from this that may not be documented yet, hence I am documenting it here.
@@ -18,6 +17,13 @@ Azure Automation is a much more mature Powershell environment in Azure. Azure Fu
 1. **It's Dirt Cheap**: Azure Functions gives you 400,000 GB-s and 1 million executions for free every month under the Consumption plan. Azure Automation only gives you 500 minutes. You can build an incredibly advanced Powershell function workflow and API environment and never get billed a single dime.
 2. **It's Fast**: With Azure Automation you usually have to wait for the job to be scheduled, queued, etc. and the feedback loop is very slow, taking often several minutes before your job runs and you see the result. Azure Functions start in seconds and scale nearly limitlessly and automatically, making it far easier to test and troubleshoot.
 3. **It's better for APIs**: Azure Functions makes it really easy to make a query with a URL or trigger on an object, queue input, OneDrive for Business file upload, etc., take that input into Powershell, do Powershell-y things to it, and output it back out as JSON, XML, or whatever you want. You can build great APIs with Powershell very rapidly, why should the C# and Java guys have all the fun? When you first create a Powershell Azure HTTP Trigger Function, the sample code is basically a REST API example written in Powershell that is ready-to-go for you.
+
+## What can you do with Azure Functions
+
+This is a running list of examples:
+
+* [Run a SQL Cleanup task on a timer](https://dfinke.github.io/2017/Use-PowerShell-in-Azure-Functions-to-perform-a-scheduled-clean-up-task/)
+* [Extend Slack to get stock data via Yahoo](https://dfinke.github.io/2017/Use-Serverless-PowerShell-to-Extend-Slack/)
 
 ## Azure Functions Environment
 
@@ -141,27 +147,36 @@ At this point you can just invoke the Cmdlets in the module and Powershell will 
 
 As noted above you can also create a "modules" directory in your function directory and save your files there if you want the modules to load every single invocation.
 
-## Troubleshoot and Debug with Kudu
+## Deployment
 
-Even though Azure Functions is supposed to take care of the "server" part for you, sometimes you need to get under the hood and fetch some files or test something in your App Service VM. Kudu is the console that gives you an interactive file browser, a process explorer, and powershell debug console to investigate problems. [David O'Brien has written a good article on how to access this troubleshooting environment](https://david-obrien.net/2016/07/azure-functions-kudu/).
-
-## Access Functions Directory via FTP
+### Access Functions Directory via FTP
 
 Since Azure Functions runs on App Service, [you can use FTP to access and deploy your functions](https://docs.microsoft.com/en-us/azure/app-service/app-service-deploy-ftp). The easiest way to find the credentials is to go to your function, go to Platform Featuers, then click Deployment Credentials and set your FTP password. Once complete you can go to Platform Featuers -> Properties and find your FTPS host name URL and FTP Deployment User to use to connect.
 
 I find this connection is extremely useful in conjunction with the [ftp-simple Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=humy2833.ftp-simple) to directly edit Azure Powershell Functions in VS Code rather than in the web editor. VS Code should also natively have this ftp remote edit functionality soon, [it already exists in preview mode](https://code.visualstudio.com/updates/v1_17#_preview-remote-file-system-api).
 
-## Set up Continuous Deployment for Azure Functions
+### Use the PowershellAzureFunctions module
+
+In addition to the old fashioned FTP route, there is a powershell module you can use to make and upload Azure functions. If you want to get super-meta, you can deploy Azure Functions from an Azure Function this way (whoah, dude).
+
+This MVP article covers how to use the Powershell Module as well as a brief "serverless computing" overview.
+
+[Rapidly Deploy Serverless Azure Functions Using Powershell](https://blogs.msdn.microsoft.com/mvpawardprogram/2017/08/15/serverless-azure-functions/)
+
+### Set up Continuous Deployment for Azure Functions
 
 While direct editing is nice for sandboxing and practice, once you get serious and start designing solutions, you will want to save your Powershell Functions in some sort of source control (e.g. GitHub) and [publish them more automatically to Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-continuous-deployment). When used in combination with the [Azure Functions Slots Preview](https://blog.elmah.io/continuous-deployment-of-azure-functions-with-slots/) this is an extrempely powerful way to test and deploy your code in Production with minimal interruption to usage.
 
-## Using Managed Service Identity with Functions
+### Using Managed Service Identity with Functions
 
 A common problem with Azure Functions is where to store credentials when accessing other services. Azure Key Vault is a logical location, and when combined with a Managed Services Identity, the Azure Function can securely access credentials it needs.
 
 * [Enabling and Using Managed Service Identity to access an Azure Key Vault with Azure Powershell Functions](https://blog.darrenjrobinson.com/enabling-and-using-managed-service-identity-to-access-an-azure-key-vault-with-azure-powershell-functions/)
 * [Using AD Managed Service Identity to Access Microsoft Graph with Azure Functions](https://gotoguy.blog/2017/09/21/using-azure-ad-managed-service-identity-to-access-microsoft-graph-with-azure-functions-and-powershell/)
 
+## Troubleshoot and Debug with Kudu
+
+Even though Azure Functions is supposed to take care of the "server" part for you, sometimes you need to get under the hood and fetch some files or test something in your App Service VM. Kudu is the console that gives you an interactive file browser, a process explorer, and powershell debug console to investigate problems. [David O'Brien has written a good article on how to access this troubleshooting environment](https://david-obrien.net/2016/07/azure-functions-kudu/).
 
 ## Powershell Azure Functions are Rad
 
