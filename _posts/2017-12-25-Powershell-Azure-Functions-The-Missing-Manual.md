@@ -8,6 +8,9 @@ Recently the Azure Functions runtime was updated to run on Windows Server 2016. 
 
 This article is targeted towards people who have Powershell experience, and need to know how the behavior is different from a normal Powershell 5.1 environment.
 
+* TOC
+{:toc}
+
 ## Why Azure Functions over Azure Automation
 
 Azure Automation is a much more mature Powershell environment in Azure. Azure Functions is still considered experimental. So why would you want to use it?
