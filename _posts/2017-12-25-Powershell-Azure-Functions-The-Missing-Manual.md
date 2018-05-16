@@ -16,7 +16,7 @@ Azure Automation is a much more mature Powershell environment in Azure. Azure Fu
 
 1. **It's Dirt Cheap**: Azure Functions gives you 400,000 GB-s and 1 million executions for free every month under the Consumption plan. Azure Automation only gives you 500 minutes. You can build an incredibly advanced Powershell function workflow and API environment and never get billed a single dime.
 2. **It's Fast**: With Azure Automation you usually have to wait for the job to be scheduled, queued, etc. and the feedback loop is very slow, taking often several minutes before your job runs and you see the result. Azure Functions start in seconds and scale nearly limitlessly and automatically, making it far easier to test and troubleshoot.
-3. **It's better for APIs**: Azure Functions makes it really easy to make a query with a URL or trigger on an object, queue input, OneDrive for Business file upload, etc., take that input into Powershell, do Powershell-y things to it, and output it back out as JSON, XML, or whatever you want. You can build great APIs with Powershell very rapidly, why should the C# and Java guys have all the fun? When you first create a Powershell Azure HTTP Trigger Function, the sample code is basically a REST API example written in Powershell that is ready-to-go for you.
+3. **It's better for APIs**: Azure Functions makes it really easy to make a query with a URL or trigger on an object, queue input, OneDrive for Business file upload, etc., take that input into Powershell, do Powershell-y things to it, and output it back out as JSON, XML, or whatever you want. You can build great APIs with Powershell very rapidly, why should the C# and Java guys have all the fun? When you first create a Powershell Azure HTTP Trigger Function, the sample code is basically a REST API example written in Powershell that is ready-to-go for you. [Brian Bunke has written a good "getting started" article on writing REST APIs in Azure Functions Powershell.](http://www.brianbunke.com/blog/2018/02/26/serverless-api-in-azure/)
 
 ## What can you do with Azure Functions
 
@@ -181,3 +181,4 @@ Even though Azure Functions is supposed to take care of the "server" part for yo
 ## Powershell Azure Functions are Rad
 
 I hope this helps you get your feet wet with Azure Powershell functions, they are an extremely powerful way to deploy solutions with Powershell that are highly scalable and extremely inexpensive.
+
