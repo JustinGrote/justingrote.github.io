@@ -22,8 +22,8 @@ Azure Automation is a much more mature Powershell environment in Azure. Azure Fu
 
 This is a running list of examples:
 
-* [Run a SQL Cleanup task on a timer](https://dfinke.github.io/2017/Use-PowerShell-in-Azure-Functions-to-perform-a-scheduled-clean-up-task/)
-* [Extend Slack to get stock data via Yahoo](https://dfinke.github.io/2017/Use-Serverless-PowerShell-to-Extend-Slack/)
+* [Run a SQL Cleanup task on a timer](https://dfinke.github.io/powershell,%20azure,%20functions/2017/05/01/Use-PowerShell-in-Azure-Functions-to-perform-a-scheduled-clean-up-task.html)
+* [Extend Slack to get stock data via Yahoo](https://dfinke.github.io/powershell,azure%20functions,%20slack/2017/05/10/Use-Serverless-PowerShell-to-Extend-Slack.html)
 
 ## Azure Functions Environment
 
