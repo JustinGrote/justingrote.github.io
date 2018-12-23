@@ -5,7 +5,7 @@ title: Powershell Azure Functions The Missing Manual
 
 Recently the Azure Functions runtime was updated to run on Windows Server 2016. This means that Powershell now runs 5.1 instead of 4.0 and there is a lot of benefit that comes from this that may not be documented yet, hence I am documenting it here.
 
-This article is targeted towards people who have Powershell experience, and need to know how the behavior is different from a normal Powershell 5.1 environment.
+This article is targeted towards people who have Powershell experience, and need to know how the behavior is different from a normal Powershell 5.1 environment. This is also not meant to be an Azure Functions Powershell tutorial, there's plenty of those that exist.
 
 * TOC
 {:toc}
@@ -27,7 +27,7 @@ This is a running list of examples:
 
 ## Azure Functions Environment
 
-Azure Functions operates basically by running on top of [Azure Web Jobs](https://buildazure.com/2017/03/08/azure-functions-vs-web-jobs-how-to-choose/) which in turn run on [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/). As a result, [the same OS enviroment restrictions apply](https://docs.microsoft.com/en-us/azure/app-service/web-sites-available-operating-system-functionality).
+Azure Functions operates basically by running on top of [Azure Web Jobs](https://buildazure.com/2017/03/08/azure-functions-vs-web-jobs-how-to-choose/) which in turn run on [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/). As a result, [the same OS enviroment restrictions apply](https://docs.microsoft.com/en-us/azure/app-service/web-sites-available-operating-system-functionality) and all functions run in the [Azure Web App Sandbox](https://github.com/projectkudu/kudu/wiki/Azure-Web-App-sandbox)
 
 ### Limitations
 
@@ -65,9 +65,9 @@ You can also use Select-Object or Format-Table to select only certain properties
 
 In Azure Functions you have two primary local storage directories available to you: **D:\Home** and **D:\Local**.
 
-**D:\Home** is your persistent area where files are kept between multiple runs. It is backed by an Azure storage account. The code for your azure function is stored in this location, generally in `D:\home\site\wwwroot\<functionname\`
+**D:\Home** is your persistent area where files are kept between multiple runs. It is backed by an Azure storage account. The code for your azure function is stored in this location, generally in `D:\home\site\wwwroot\<functionname\`. The first 1GB of this storage is included in the Consumption plan, and is primarily meant for your source code and related libraries/resources, not for data storage.
 
-**D:\Local** is where temporary files are stored and are not persistent between multiple function instances. You can use this area to store files that are specific to a run, for instance temporary data you've downloaded from another source or data you want to dump out. Keep in mind that these files may or may not be present depending on if your next function run started on the same instance or not (which depends on the type of App Service plan you chose), so ensure if you write scripts that write to the temp that you overwrite anything in place, and optionally clean up any temp files you use, so that you don't get junk from one run affecting another run.
+**D:\Local** is where temporary files are stored and are not persistent between multiple function instances. The default consumption plan gives you *500MB of temp space* to work with per instance, but the dedicated plans give over 100GB. You can use this area to store files that are specific to a run, for instance temporary data you've downloaded from another source or data you want to dump out. Keep in mind that these files may or may not be present depending on if your next function run started on the same instance or not (which depends on the type of App Service plan you chose), so ensure if you write scripts that write to the temp that you overwrite anything in place, and optionally clean up any temp files you use, so that you don't get junk from one run affecting another run.
 
 ### Special Azure Functions Directories
 
