@@ -1,0 +1,2 @@
+1. Set up an app registration
+2. Palo Alto SAML Federation for your tenant (replace tenant.domain.com with your tenant doamin https://login.microsoftonline.com/tenant.domain.com/FederationMetadata/2007-06/FederationMetadata.xml

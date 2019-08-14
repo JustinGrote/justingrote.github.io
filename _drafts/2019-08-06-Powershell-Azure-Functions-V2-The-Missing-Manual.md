@@ -1,6 +1,20 @@
 ---
+layout: post
 title: Powershell Azure Functions The Missing Manual
 ---
+
+# Tips and Tricks
+Trigger Metadata will include FunctionDirectory and FunctionName as parameters
+<<Using Azure Storage Emulator with Azure Functions>>
+<<Table and Queue will automatically create them if not present>>
+<<Best Practice: Use AzureWebJobStorage>>
+<<Gotcha: Local.settings.json changes are not persisted on save reloads in functions host>>
+<<Output Binding Common Exception: Object reference not set to an instance of an object. - Something wrong with your output binding expression. Will also trigger if it doesn't meet the correct type>>
+<<Using Azure Storage Emulator (Azurite won't work except for blob)>>
+<<{randguid} is not reliable as an output binding to {sys.randguid}>>
+<<{sys.randguid} in your code is not the same as {sys.randguid} in an output binding>>
+
+# Powershell Azure Functions: The Missing Manual
 
 Recently the Azure Functions runtime was updated to run on Windows Server 2016. This means that Powershell now runs 5.1 instead of 4.0 and there is a lot of benefit that comes from this that may not be documented yet, hence I am documenting it here.
 

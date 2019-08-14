@@ -1,7 +1,6 @@
 ---
 title: Using Azure Artifacts As a Private Powershell Gallery
 ---
-# Summary
 
 Azure DevOps (formerly VSTS) has a component called Azure Artifacts (formerly VSTS Packages) that lets you publish NuGet feeds. While typically used for .NET assemblies, Powershell Gallery (based on PackageManagement) uses NuGet feeds in the background, and it turns out these are compatible
 
