@@ -1,5 +1,5 @@
 ---
-title: Powershell Azure Functions The Missing Manual
+title: Powershell Azure Functions - The Missing Manual
 classes: wide
 toc: true
 ---
