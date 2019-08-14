@@ -1,13 +1,12 @@
 ---
 title: Powershell Azure Functions The Missing Manual
+classes: wide
+toc: true
 ---
 
 Recently the Azure Functions runtime was updated to run on Windows Server 2016. This means that Powershell now runs 5.1 instead of 4.0 and there is a lot of benefit that comes from this that may not be documented yet, hence I am documenting it here.
 
 This article is targeted towards people who have Powershell experience, and need to know how the behavior is different from a normal Powershell 5.1 environment. This is also not meant to be an Azure Functions Powershell tutorial, there's plenty of those that exist.
-
-* TOC
-{:toc}
 
 ## Why Azure Functions over Azure Automation
 
